@@ -3,7 +3,7 @@ library(shiny)
 ui <- fluidPage(titlePanel("Swiss"),
                 
                 sidebarLayout(sidebarPanel(
-                  selectInput("dataset", "Dataset:", c("swiss", "states77")),
+                  selectInput("dataset", "Dataset:", c("swiss", "states77", "LakeHuron")),
                   uiOutput("datasetColumns")
                 ),
                 

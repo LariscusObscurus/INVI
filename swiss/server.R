@@ -107,7 +107,12 @@ server <- function(input, output) {
   dataset <- reactive({
     switch(input$dataset,
            "swiss" = swiss,
-           "states77" = as.data.frame(state.x77))
+           "states77" = as.data.frame(state.x77),
+           "LakeHuron" = {
+             df <- as.data.frame(LakeHuron)
+             names(df) <- "level"
+             df
+           })
   })
   
   output$datasetColumns <- renderUI({
