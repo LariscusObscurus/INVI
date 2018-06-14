@@ -1,5 +1,6 @@
 library(shiny)
 library(moments) #needed for kurtosis
+library(vioplot)
 source("utils.R")
 
 location <- function(input, output, dataset) {
@@ -66,8 +67,43 @@ distribution <- function(input, output, dataset) {
   })
 }
 
-server <- function(input, output) {
+showPlots <- function(input, output, dataset) {
+  output$histogram <- renderPlot({
+    hist(dataset()[[input$col]], main = "Histogram", xlab = input$col)
+  })
   
+  output$boxPlot <- renderPlot({
+    boxplot(
+      dataset()[[input$col]],
+      data = dataset(),
+      main = "Box Plot",
+      xlab = input$col,
+      horizontal = TRUE
+    )
+  })
+  
+  output$violinPlot <- renderPlot({
+    vioplot(
+      dataset()[[input$col]],
+      names = c(paste("Density of ", input$col)),
+      horizontal = TRUE,
+      col = "gold"
+    )
+    title("Violin Plot")
+  })
+  
+  output$kernelDensityPlot <- renderPlot({
+    plot(density(dataset()[[input$col]]), main = "Kernel Density Plot", xlab =
+           input$col)
+  })
+  
+  output$quantileQuantilePlot <- renderPlot({
+    qqnorm(dataset()[[input$col]], main = "Normal Q-Q Plot", xlab = input$col)
+    qqline(dataset()[[input$col]], distribution = qnorm)
+  })
+}
+
+server <- function(input, output) {
   dataset <- reactive({
     switch(input$dataset,
            "swiss" = swiss,
@@ -83,4 +119,6 @@ server <- function(input, output) {
   variation(input, output, dataset)
   
   distribution(input, output, dataset)
+  
+  showPlots(input, output, dataset)
 }
