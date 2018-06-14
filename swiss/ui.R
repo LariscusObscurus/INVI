@@ -55,6 +55,16 @@ ui <- fluidPage(# Application title
       
       h5(strong("CoefficientOfVariance")),
       textOutput("coefficientOfVariance")
+    ),
+    column(
+      3,
+      h3("Distribution"),
+      
+      h5(strong("Skewness")),
+      textOutput("skewness"),
+      
+      h5(strong("Peakedness")),
+      textOutput("peakedness")
     )
     
   ))))
