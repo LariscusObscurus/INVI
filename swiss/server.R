@@ -2,51 +2,64 @@ library(shiny)
 source("utils.R")
 
 location <- function(input, output, dataset){
+  
    output$min <- renderText({
-     min(dataset)
+     min(dataset[[input$col]])
    })
    
    output$max <- renderText({
-     max(dataset)
+     max(dataset[[input$col]])
    })
    
    output$median <- renderText({
-     median(dataset)
+     median(dataset[[input$col]])
+   })
+   
+   output$mean <- renderText({
+     mean(dataset[[input$col]])
+   })
+   
+   output$mode <- renderText({
+     mode(dataset[[input$col]])
    })
    
    output$midrange <- renderText({
-     midrange(dataset)
+     midrange(dataset[[input$col]])
    })
 }
 
 variation <- function(input, output, dataset){
   
    output$range <- renderText({
-     range(dataset)
+     range(dataset[[input$col]])
    })
    
    output$standardDeviation <- renderText({
-     sd(dataset)
+     sd(dataset[[input$col]])
    })
    
    output$madMean <- renderText({
-     mad(dataset, center=mean(dataset))
+     mad(dataset[[input$col]], center=mean(dataset[[input$col]]))
    })
    
    output$madMedian <- renderText({
-     mad(dataset, center=median(dataset))
+     mad(dataset[[input$col]], center=median(dataset[[input$col]]))
    })
    
   
    output$medmed <- renderText({
-     medmed(dataset)
+     medmed(dataset[[input$col]])
+   })
+   
+   output$coefficientOfVariance <- renderText({
+     coefficientOfVariance(dataset[[input$col]])
    })
   
 }
 
 server <- function(input, output) {
   
-  location(input, output, swiss[[input$dataFrameColumn]])
+  location(input, output, swiss)
    
-  variation(input, output, swiss[[input$dataFrameColumn]])
+  variation(input, output, swiss)
 }

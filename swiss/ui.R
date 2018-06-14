@@ -6,7 +6,7 @@ ui <- fluidPage(# Application title
   
   # Sidebar with a slider input for number of bins
   sidebarLayout(sidebarPanel(
-    selectInput("dataFrameColumn", "Variable:", colnames(swiss))
+    selectInput("col", "Variable:", colnames(swiss))
   ),
   
   # Show a plot of the generated distribution
@@ -15,14 +15,20 @@ ui <- fluidPage(# Application title
       3,
       h3("Location"),
       
+      h5(strong("Mean")),
+      textOutput("mean"),
+      
+      h5(strong("Median")),
+      textOutput("median"),
+      
       h5(strong("Min")),
       textOutput("min"),
       
       h5(strong("Max")),
       textOutput("max"),
       
-      h5(strong("Median")),
-      textOutput("median"),
+      h5(strong("Mode")),
+      textOutput("mode"),
       
       h5(strong("Midrange")),
       textOutput("midrange")
@@ -45,7 +51,10 @@ ui <- fluidPage(# Application title
       textOutput("madMedian"),
       
       h5(strong("Medmed")),
-      textOutput("medmed")
+      textOutput("medmed"),
+      
+      h5(strong("CoefficientOfVariance")),
+      textOutput("coefficientOfVariance")
     )
     
   ))))
