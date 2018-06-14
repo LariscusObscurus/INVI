@@ -4,72 +4,83 @@ source("utils.R")
 
 location <- function(input, output, dataset) {
   output$min <- renderText({
-    min(dataset[[input$col]])
+    min(dataset()[[input$col]])
   })
   
   output$max <- renderText({
-    max(dataset[[input$col]])
+    max(dataset()[[input$col]])
   })
   
   output$median <- renderText({
-    median(dataset[[input$col]])
+    median(dataset()[[input$col]])
   })
   
   output$mean <- renderText({
-    mean(dataset[[input$col]])
+    mean(dataset()[[input$col]])
   })
   
   output$mode <- renderText({
-    mode(dataset[[input$col]])
+    mode(dataset()[[input$col]])
   })
   
   output$midrange <- renderText({
-    midrange(dataset[[input$col]])
+    midrange(dataset()[[input$col]])
   })
 }
 
 variation <- function(input, output, dataset) {
   output$range <- renderText({
-    range(dataset[[input$col]])
+    range(dataset()[[input$col]])
   })
   
   output$standardDeviation <- renderText({
-    sd(dataset[[input$col]])
+    sd(dataset()[[input$col]])
   })
   
   output$madMean <- renderText({
-    mad(dataset[[input$col]], center = mean(dataset[[input$col]]))
+    mad(dataset()[[input$col]], center = mean(dataset()[[input$col]]))
   })
   
   output$madMedian <- renderText({
-    mad(dataset[[input$col]], center = median(dataset[[input$col]]))
+    mad(dataset()[[input$col]], center = median(dataset()[[input$col]]))
   })
   
   
   output$medmed <- renderText({
-    medmed(dataset[[input$col]])
+    medmed(dataset()[[input$col]])
   })
   
   output$coefficientOfVariance <- renderText({
-    coefficientOfVariance(dataset[[input$col]])
+    coefficientOfVariance(dataset()[[input$col]])
   })
   
 }
 
 distribution <- function(input, output, dataset) {
   output$skewness <- renderText({
-    skewness(dataset[[input$col]])
+    skewness(dataset()[[input$col]])
   })
   
   output$peakedness <- renderText({
-    kurtosis(swiss[[input$col]])
+    kurtosis(dataset()[[input$col]])
   })
 }
 
 server <- function(input, output) {
-  location(input, output, swiss)
   
-  variation(input, output, swiss)
+  dataset <- reactive({
+    switch(input$dataset,
+           "swiss" = swiss,
+           "states77" = as.data.frame(state.x77))
+  })
   
-  distribution(input, output, swiss)
+  output$datasetColumns <- renderUI({
+    selectInput("col", "Variable:", colnames(dataset()))
+  })
+  
+  location(input, output, dataset)
+  
+  variation(input, output, dataset)
+  
+  distribution(input, output, dataset)
 }

@@ -6,11 +6,13 @@ ui <- fluidPage(# Application title
   
   # Sidebar with a slider input for number of bins
   sidebarLayout(sidebarPanel(
-    selectInput("col", "Variable:", colnames(swiss))
+    selectInput("dataset", "Dataset:", c("swiss", "states77")),
+    uiOutput("datasetColumns")
   ),
   
   # Show a plot of the generated distribution
-  mainPanel(fluidRow(
+  mainPanel(
+    fluidRow(
     column(
       3,
       h3("Location"),
