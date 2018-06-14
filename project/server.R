@@ -69,7 +69,10 @@ distribution <- function(input, output, dataset) {
 
 showPlots <- function(input, output, dataset) {
   output$histogram <- renderPlot({
-    hist(dataset()[[input$col]], main = "Histogram", xlab = input$col)
+    hist(dataset()[[input$col]],
+         main = "Histogram",
+         xlab = input$col,
+         col = "powderblue")
   })
   
   output$boxPlot <- renderPlot({
@@ -78,7 +81,8 @@ showPlots <- function(input, output, dataset) {
       data = dataset(),
       main = "Box Plot",
       xlab = input$col,
-      horizontal = TRUE
+      horizontal = TRUE,
+      col="powderblue"
     )
   })
   
@@ -87,14 +91,17 @@ showPlots <- function(input, output, dataset) {
       dataset()[[input$col]],
       names = c(paste("Density of ", input$col)),
       horizontal = TRUE,
-      col = "gold"
+      col = "powderblue"
     )
     title("Violin Plot")
   })
   
   output$kernelDensityPlot <- renderPlot({
-    plot(density(dataset()[[input$col]]), main = "Kernel Density Plot", xlab =
-           input$col)
+    plot(
+      density(dataset()[[input$col]]),
+      main = "Kernel Density Plot",
+      xlab = input$col
+    )
   })
   
   output$quantileQuantilePlot <- renderPlot({

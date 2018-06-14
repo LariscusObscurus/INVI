@@ -65,6 +65,9 @@ ui <- fluidPage(titlePanel("Swiss"),
                       textOutput("peakedness")
                     ),
                     fluidRow(
+                      
+                      column(6,
+                             plotOutput("kernelDensityPlot")),
                       column(6,
                              plotOutput("boxPlot")),
                       column(6,
