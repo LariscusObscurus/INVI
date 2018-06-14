@@ -1,24 +1,51 @@
 library(shiny)
 
 # Define UI for application that draws a histogram
-ui <- fluidPage(
-   
-   # Application title
-   titlePanel("Old Faithful Geyser Data"),
-   
-   # Sidebar with a slider input for number of bins 
-   sidebarLayout(
-      sidebarPanel(
-         sliderInput("bins",
-                     "Number of bins:",
-                     min = 1,
-                     max = 50,
-                     value = 30)
-      ),
+ui <- fluidPage(# Application title
+  titlePanel("Swiss"),
+  
+  # Sidebar with a slider input for number of bins
+  sidebarLayout(sidebarPanel(
+    selectInput("dataFrameColumn", "Variable:", colnames(swiss))
+  ),
+  
+  # Show a plot of the generated distribution
+  mainPanel(fluidRow(
+    column(
+      3,
+      h3("Location"),
       
-      # Show a plot of the generated distribution
-      mainPanel(
-         plotOutput("distPlot")
-      )
-   )
-)
+      h5(strong("Min")),
+      textOutput("min"),
+      
+      h5(strong("Max")),
+      textOutput("max"),
+      
+      h5(strong("Median")),
+      textOutput("median"),
+      
+      h5(strong("Midrange")),
+      textOutput("midrange")
+      
+    ),
+    column(
+      3,
+      h3("Variation"),
+      
+      h5(strong("Range")),
+      textOutput("range"),
+      
+      h5(strong("StandardDeviation")),
+      textOutput("standardDeviation"),
+      
+      h5(strong("MAD (mean)")),
+      textOutput("madMean"),
+      
+      h5(strong("MAD (median)")),
+      textOutput("madMedian"),
+      
+      h5(strong("Medmed")),
+      textOutput("medmed")
+    )
+    
+  ))))
