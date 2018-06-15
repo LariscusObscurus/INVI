@@ -6,9 +6,10 @@ source("utils.R")
 makeModel <- function(input, dataset) {
   formula <-
     as.formula(paste(
-      paste(input$explain, "~"),
-      paste(input$using, collapse = " + ")
+      paste(Map(surroundWhitespace, input$explain), "~"),
+      paste(Map(surroundWhitespace, input$using), collapse = " + ")
     ))
+  print(formula)
   lm1 <- lm(formula, data = dataset())
 }
 
@@ -131,7 +132,7 @@ showPlots <- function(input, output, dataset) {
         logDirection <- paste(logDirection, "y", sep = "")
       }
       
-      formula <- as.formula(paste("~ ",paste(input$colMulti, collapse =" + ")))
+      formula <- as.formula(paste("~ ",paste(Map(surroundWhitespace, input$colMulti), collapse =" + ")))
       print(formula)
       pairs(formula,
             lower.panel = panel.smooth,
@@ -148,7 +149,7 @@ showPlots <- function(input, output, dataset) {
   
   output$selfChoosyCorrelationPlot <- renderPlot({
     if (length(input$using) > 1) {
-      formula <- as.formula(paste("~ ",paste(input$using, collapse =" + ")))
+      formula <- as.formula(paste("~ ",paste(Map(surroundWhitespace, input$using), collapse =" + ")))
       pairs(
         formula,
         data = dataset(),
@@ -166,7 +167,7 @@ showPlots <- function(input, output, dataset) {
   })
   
   output$modelQuantileQuantilePlot <- renderPlot({
-    if (length(input$colMulti) > 1) {
+    if (length(input$using) > 1) {
       lm1 <- makeModel(input, dataset)
       plot(lm1, which = c(2))
     }

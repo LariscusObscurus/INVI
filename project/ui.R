@@ -107,7 +107,7 @@ ui <- fluidPage(titlePanel("Datavisualiser"),
                             "The LakeHuron dataset has only a single dimension and is a timeseries. No linear model for u!"
                           )
                         ),
-                        conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("correlationPlot")),
+                        conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("correlationPlot", height = "900px")),
                         conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("selfChoosyCorrelationPlot")),
                         conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("fitting")),
                         conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("modelQuantileQuantilePlot")),

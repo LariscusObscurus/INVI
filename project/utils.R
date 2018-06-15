@@ -38,3 +38,11 @@ panel.cor <- function(x,
     cex.cor <- 0.8 / strwidth(txt)
   text(0.5, 0.5, txt, cex = cex.cor * r)
 }
+
+surroundWhitespace <- function(value) {
+  if (grepl(".*\\s.*", value)) {
+    sprintf("`%s`", value)
+  } else{
+    value
+  }
+}
