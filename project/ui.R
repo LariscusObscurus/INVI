@@ -88,7 +88,10 @@ ui <- fluidPage(titlePanel("Datavisualiser"),
                   tabPanel(
                     "Correlation & LinearModel",
                     sidebarLayout(
-                      sidebarPanel(uiOutput("datasetColumnsMulti2")),
+                      sidebarPanel(
+                        uiOutput("datasetColumnsExplain"),
+                        uiOutput("datasetColumnsMulti2")
+                        ),
                       mainPanel(
                         conditionalPanel(
                           condition = "input.dataset == 'LakeHuron'",
@@ -97,7 +100,8 @@ ui <- fluidPage(titlePanel("Datavisualiser"),
                           )
                         ),
                         conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("correlationPlot")),
-                        conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("selfChoosyCorrelationPlot"))
+                        conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("selfChoosyCorrelationPlot")),
+                        conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("fitting"))
                       )
                     )
                   )

@@ -133,6 +133,19 @@ showPlots <- function(input, output, dataset) {
       )
     }
   })
+  
+  output$fitting <- renderPlot({
+    
+    if (length(input$colMulti) > 1) {
+      formula <-
+        as.formula(paste(
+          paste(input$explain, "~"),
+          paste(input$colMulti, collapse = " + ")
+        ))
+      lm1 <- lm(formula, data = dataset())
+      plot(lm1, which = c(1))
+    }
+  })
 }
 
 server <- function(input, output) {
@@ -157,7 +170,11 @@ server <- function(input, output) {
   
   #It is impossible to use the same output twice https://github.com/rstudio/shiny/issues/743
   output$datasetColumnsMulti2 <- renderUI({
-    selectInput("colMulti", "Variable:", colnames(dataset()), multiple = TRUE)
+    selectInput("colMulti", "Using:", colnames(dataset()), multiple = TRUE)
+  })
+  
+  output$datasetColumnsExplain <- renderUI({
+    selectInput("explain", "Explain:", colnames(dataset()))
   })
   
   location(input, output, dataset)
