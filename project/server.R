@@ -115,6 +115,24 @@ showPlots <- function(input, output, dataset) {
       pairs(formula , data = dataset())
     }
   })
+  
+  output$correlationPlot <- renderPlot({
+    if (dim(dataset())[2] > 1) {
+      pairs(dataset(), lower.panel = panel.smooth, upper.panel = panel.cor)
+    }
+  })
+  
+  output$selfChoosyCorrelationPlot <- renderPlot({
+    if (length(input$colMulti) > 1) {
+      formula <- as.formula(paste("~ ",paste(input$colMulti, collapse =" + ")))
+      pairs(
+        formula,
+        data = dataset(),
+        lower.panel = panel.smooth,
+        upper.panel = panel.cor
+      )
+    }
+  })
 }
 
 server <- function(input, output) {
@@ -134,6 +152,11 @@ server <- function(input, output) {
   })
   
   output$datasetColumnsMulti <- renderUI({
+    selectInput("colMulti", "Variable:", colnames(dataset()), multiple = TRUE)
+  })
+  
+  #It is impossible to use the same output twice https://github.com/rstudio/shiny/issues/743
+  output$datasetColumnsMulti2 <- renderUI({
     selectInput("colMulti", "Variable:", colnames(dataset()), multiple = TRUE)
   })
   
