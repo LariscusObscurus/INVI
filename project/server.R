@@ -7,7 +7,7 @@ makeModel <- function(input, dataset) {
   formula <-
     as.formula(paste(
       paste(input$explain, "~"),
-      paste(input$colMulti, collapse = " + ")
+      paste(input$using, collapse = " + ")
     ))
   lm1 <- lm(formula, data = dataset())
 }
@@ -120,8 +120,23 @@ showPlots <- function(input, output, dataset) {
   
   output$scatterPlot <- renderPlot({ 
     if (length(input$colMulti) > 1) {
+      
+      logDirection <- "";
+      
+      if (input$logx){
+        logDirection <- paste(logDirection, "x", sep = "")
+      }
+      
+      if (input$logy){
+        logDirection <- paste(logDirection, "y", sep = "")
+      }
+      
       formula <- as.formula(paste("~ ",paste(input$colMulti, collapse =" + ")))
-      pairs(formula , data = dataset())
+      print(formula)
+      pairs(formula,
+            lower.panel = panel.smooth,
+            data = dataset(),
+            log = logDirection)
     }
   })
   
@@ -132,8 +147,8 @@ showPlots <- function(input, output, dataset) {
   })
   
   output$selfChoosyCorrelationPlot <- renderPlot({
-    if (length(input$colMulti) > 1) {
-      formula <- as.formula(paste("~ ",paste(input$colMulti, collapse =" + ")))
+    if (length(input$using) > 1) {
+      formula <- as.formula(paste("~ ",paste(input$using, collapse =" + ")))
       pairs(
         formula,
         data = dataset(),
@@ -144,7 +159,7 @@ showPlots <- function(input, output, dataset) {
   })
   
   output$fitting <- renderPlot({
-    if (length(input$colMulti) > 1) {
+    if (length(input$using) > 1) {
       lm1 <- makeModel(input, dataset)
       plot(lm1, which = c(1))
     }
@@ -158,7 +173,7 @@ showPlots <- function(input, output, dataset) {
   })
   
   output$outliers <- renderPlot({
-    if (length(input$colMulti) > 1) {
+    if (length(input$using) > 1) {
       lm1 <- makeModel(input, dataset)
       plot(lm1)
     }
@@ -188,7 +203,7 @@ server <- function(input, output) {
   
   #It is impossible to use the same output twice https://github.com/rstudio/shiny/issues/743
   output$datasetColumnsMulti2 <- renderUI({
-    selectInput("colMulti", "Using:", colnames(dataset()), multiple = TRUE)
+    selectInput("using", "Using:", colnames(dataset()), multiple = TRUE)
   })
   
   output$datasetColumnsExplain <- renderUI({

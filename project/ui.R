@@ -80,10 +80,18 @@ ui <- fluidPage(titlePanel("Datavisualiser"),
                                )
                              ))
                            )),
-                  tabPanel("ScatterPlot",
+                  tabPanel("Relations",
                            sidebarLayout(
-                             sidebarPanel(uiOutput("datasetColumnsMulti")),
-                             mainPanel(plotOutput("scatterPlot"))
+                             sidebarPanel(
+                               uiOutput("datasetColumnsMulti"),
+                               checkboxInput("logx", "Log x-axis"),
+                               checkboxInput("logy", "Log y-axis")),
+                             mainPanel(
+                               fluidRow(
+                                 column(12,
+                                        plotOutput("scatterPlot", height = "900px"))
+                               )
+                             )
                            )),
                   tabPanel(
                     "Correlation & LinearModel",
@@ -104,7 +112,6 @@ ui <- fluidPage(titlePanel("Datavisualiser"),
                         conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("fitting")),
                         conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("modelQuantileQuantilePlot")),
                         conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("outliers"))
-                        
                       )
                     )
                   )
