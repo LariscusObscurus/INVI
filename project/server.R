@@ -108,6 +108,13 @@ showPlots <- function(input, output, dataset) {
     qqnorm(dataset()[[input$col]], main = "Normal Q-Q Plot", xlab = input$col)
     qqline(dataset()[[input$col]], distribution = qnorm)
   })
+  
+  output$scatterPlot <- renderPlot({ 
+    if (length(input$colMulti) > 1) {
+      formula <- as.formula(paste("~ ",paste(input$colMulti, collapse =" + ")))
+      pairs(formula , data = dataset())
+    }
+  })
 }
 
 server <- function(input, output) {
@@ -124,6 +131,10 @@ server <- function(input, output) {
   
   output$datasetColumns <- renderUI({
     selectInput("col", "Variable:", colnames(dataset()))
+  })
+  
+  output$datasetColumnsMulti <- renderUI({
+    selectInput("colMulti", "Variable:", colnames(dataset()), multiple = TRUE)
   })
   
   location(input, output, dataset)
