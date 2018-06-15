@@ -101,7 +101,10 @@ ui <- fluidPage(titlePanel("Datavisualiser"),
                         ),
                         conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("correlationPlot")),
                         conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("selfChoosyCorrelationPlot")),
-                        conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("fitting"))
+                        conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("fitting")),
+                        conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("modelQuantileQuantilePlot")),
+                        conditionalPanel(condition = "input.dataset != 'LakeHuron'", plotOutput("outliers"))
+                        
                       )
                     )
                   )

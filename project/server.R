@@ -3,6 +3,15 @@ library(moments) #needed for kurtosis
 library(vioplot)
 source("utils.R")
 
+makeModel <- function(input, dataset) {
+  formula <-
+    as.formula(paste(
+      paste(input$explain, "~"),
+      paste(input$colMulti, collapse = " + ")
+    ))
+  lm1 <- lm(formula, data = dataset())
+}
+
 location <- function(input, output, dataset) {
   output$min <- renderText({
     min(dataset()[[input$col]])
@@ -135,17 +144,26 @@ showPlots <- function(input, output, dataset) {
   })
   
   output$fitting <- renderPlot({
-    
     if (length(input$colMulti) > 1) {
-      formula <-
-        as.formula(paste(
-          paste(input$explain, "~"),
-          paste(input$colMulti, collapse = " + ")
-        ))
-      lm1 <- lm(formula, data = dataset())
+      lm1 <- makeModel(input, dataset)
       plot(lm1, which = c(1))
     }
   })
+  
+  output$modelQuantileQuantilePlot <- renderPlot({
+    if (length(input$colMulti) > 1) {
+      lm1 <- makeModel(input, dataset)
+      plot(lm1, which = c(2))
+    }
+  })
+  
+  output$outliers <- renderPlot({
+    if (length(input$colMulti) > 1) {
+      lm1 <- makeModel(input, dataset)
+      plot(lm1)
+    }
+  })
+  
 }
 
 server <- function(input, output) {
