@@ -211,7 +211,8 @@ server <- function(input, output) {
       "states77" = as.data.frame(state.x77),
       "LakeHuron" = {
         df <- as.data.frame(LakeHuron)
-        names(df) <- "level"
+        df["year"] <- c(1875:1972)
+        names(df)[names(df)=="x"] <- "level"
         df
       }
     )
