@@ -5,10 +5,12 @@ source("utils.R")
 
 makeModel <- function(input, dataset) {
   formula <-
-    as.formula(paste(
-      paste(Map(surroundWhitespace, input$explain), "~"),
-      paste(Map(surroundWhitespace, input$using), collapse = " + ")
-    ))
+    as.formula(paste(paste(
+      Map(surroundWhitespace, input$explain), "~"
+    ),
+    paste(
+      Map(surroundWhitespace, input$using), collapse = " + "
+    )))
   print(formula)
   lm1 <- lm(formula, data = dataset())
 }
@@ -92,7 +94,7 @@ showPlots <- function(input, output, dataset) {
       main = "Box Plot",
       xlab = input$col,
       horizontal = TRUE,
-      col="powderblue"
+      col = "powderblue"
     )
   })
   
@@ -107,11 +109,9 @@ showPlots <- function(input, output, dataset) {
   })
   
   output$kernelDensityPlot <- renderPlot({
-    plot(
-      density(dataset()[[input$col]]),
-      main = "Kernel Density Plot",
-      xlab = input$col
-    )
+    plot(density(dataset()[[input$col]]),
+         main = "Kernel Density Plot",
+         xlab = input$col)
   })
   
   output$quantileQuantilePlot <- renderPlot({
@@ -119,37 +119,47 @@ showPlots <- function(input, output, dataset) {
     qqline(dataset()[[input$col]], distribution = qnorm)
   })
   
-  output$scatterPlot <- renderPlot({ 
+  output$scatterPlot <- renderPlot({
     if (length(input$colMulti) > 1) {
+      logDirection <- ""
       
-      logDirection <- "";
       
-      if (input$logx){
+      if (input$logx) {
         logDirection <- paste(logDirection, "x", sep = "")
       }
       
-      if (input$logy){
+      if (input$logy) {
         logDirection <- paste(logDirection, "y", sep = "")
       }
       
-      formula <- as.formula(paste("~ ",paste(Map(surroundWhitespace, input$colMulti), collapse =" + ")))
+      formula <-
+        as.formula(paste("~ ", paste(
+          Map(surroundWhitespace, input$colMulti), collapse = " + "
+        )))
       print(formula)
-      pairs(formula,
-            lower.panel = panel.smooth,
-            data = dataset(),
-            log = logDirection)
+      pairs(
+        formula,
+        lower.panel = panel.smooth,
+        data = dataset(),
+        log = logDirection
+      )
     }
   })
   
   output$correlationPlot <- renderPlot({
     if (dim(dataset())[2] > 1) {
-      pairs(dataset(), lower.panel = panel.smooth, upper.panel = panel.cor)
+      pairs(dataset(),
+            lower.panel = panel.smooth,
+            upper.panel = panel.cor)
     }
   })
   
   output$selfChoosyCorrelationPlot <- renderPlot({
     if (length(input$using) > 1) {
-      formula <- as.formula(paste("~ ",paste(Map(surroundWhitespace, input$using), collapse =" + ")))
+      formula <-
+        as.formula(paste("~ ", paste(
+          Map(surroundWhitespace, input$using), collapse = " + "
+        )))
       pairs(
         formula,
         data = dataset(),
@@ -180,18 +190,31 @@ showPlots <- function(input, output, dataset) {
     }
   })
   
+  
+}
+
+summaries <- function(input, output, dataset) {
+  output$summary <- renderPrint({
+    if (length(input$using) > 1) {
+      lm1 <- makeModel(input, dataset)
+      summary(lm1)
+    }
+  })
+  
 }
 
 server <- function(input, output) {
   dataset <- reactive({
-    switch(input$dataset,
-           "swiss" = swiss,
-           "states77" = as.data.frame(state.x77),
-           "LakeHuron" = {
-             df <- as.data.frame(LakeHuron)
-             names(df) <- "level"
-             df
-           })
+    switch(
+      input$dataset,
+      "swiss" = swiss,
+      "states77" = as.data.frame(state.x77),
+      "LakeHuron" = {
+        df <- as.data.frame(LakeHuron)
+        names(df) <- "level"
+        df
+      }
+    )
   })
   
   output$datasetColumns <- renderUI({
@@ -218,4 +241,6 @@ server <- function(input, output) {
   distribution(input, output, dataset)
   
   showPlots(input, output, dataset)
+  
+  summaries(input, output, dataset)
 }
