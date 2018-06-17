@@ -246,7 +246,7 @@ server <- function(input, output) {
   })
   
   output$binsSlider<- renderUI({
-    sliderInput("bins", "Histogram bins:" , min = 1, max = length(dataset()[[input$col]]), value = length(dataset()[[input$col]]) / 2)
+    sliderInput("bins", "Histogram bins:" , min = 1, max = length(dataset()[[input$col]]), value = length(dataset()[[input$col]]) / 4)
   })
   
   output$datasetColumns <- renderUI({
