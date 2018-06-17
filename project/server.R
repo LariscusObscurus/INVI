@@ -74,17 +74,44 @@ distribution <- function(input, output, dataset) {
     skewness(dataset()[[input$col]])
   })
   
+  output$skewnessDescription <- renderText({
+    skew <- skewness(dataset()[[input$col]])
+    if (skew < 0) {
+      "Skew < 0. Die verteilung ist links-schief."
+    }
+    else if (skew > 0) {
+      "Skew > 0. Die verteilung ist rechts-schief."
+    }
+    else{
+      "Skew = 0. Die verteilung ist perfekt symmetrisch."
+    }
+    
+  })
+  
   output$peakedness <- renderText({
     kurtosis(dataset()[[input$col]])
+  })
+  
+  output$peakednessDescription <- renderText({
+    peakedness <- kurtosis(dataset()[[input$col]])
+    if (peakedness < 0) {
+      "Negative kurtosis, Flachgipfelig : Die Daten haben wahrscheinlich leichte Ränder."
+    } else if (peakedness > 0) {
+      "Positive kurtosis, Steilgipfelig: Die Daten haben wahrscheinlich schwere Ränder."
+    } else {
+      "Kurtosis = 0: Eine perfekte Normalverteilung."
+    } 
   })
 }
 
 showPlots <- function(input, output, dataset) {
   output$histogram <- renderPlot({
+    bins <- seq(min(dataset()[[input$col]]), max(dataset()[[input$col]]), length.out = input$bins)
     hist(dataset()[[input$col]],
          main = "Histogram",
          xlab = input$col,
-         col = "powderblue")
+         col = "powderblue",
+         breaks = bins)
   })
   
   output$boxPlot <- renderPlot({
@@ -216,6 +243,10 @@ server <- function(input, output) {
         df
       }
     )
+  })
+  
+  output$binsSlider<- renderUI({
+    sliderInput("bins", "Histogram bins:" , min = 1, max = length(dataset()[[input$col]]), value = length(dataset()[[input$col]]) / 2)
   })
   
   output$datasetColumns <- renderUI({

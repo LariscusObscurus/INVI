@@ -7,7 +7,8 @@ ui <- fluidPage(titlePanel("Datavisualiser"),
                            sidebarLayout(
                              sidebarPanel(
                                selectInput("dataset", "Dataset:", c("swiss", "states77", "LakeHuron")),
-                               uiOutput("datasetColumns")
+                               uiOutput("datasetColumns"),
+                               uiOutput("binsSlider")
                              ),
                              
                              mainPanel(fluidRow(
@@ -62,17 +63,19 @@ ui <- fluidPage(titlePanel("Datavisualiser"),
                                  
                                  h5(strong("Skewness")),
                                  textOutput("skewness"),
+                                 textOutput("skewnessDescription"),
                                  
                                  h5(strong("Peakedness")),
-                                 textOutput("peakedness")
+                                 textOutput("peakedness"),
+                                 textOutput("peakednessDescription")
                                ),
                                fluidRow(
+                                 column(6,
+                                        plotOutput("histogram")),
                                  column(6,
                                         plotOutput("kernelDensityPlot")),
                                  column(6,
                                         plotOutput("boxPlot")),
-                                 column(6,
-                                        plotOutput("histogram")),
                                  column(6,
                                         plotOutput("quantileQuantilePlot")),
                                  column(6,
