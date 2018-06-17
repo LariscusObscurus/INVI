@@ -1,4 +1,6 @@
 library(shiny)
+library(mosaic)
+library(purrr)
 
 server <- function(input, output) {
   output$dimensions <- renderUI({
@@ -11,7 +13,7 @@ server <- function(input, output) {
   output$mosaicPlot <- renderPlot({
     dims <- paste(input$dimensions, collapse = " + ")
     formula <- as.formula(paste("~ ", dims, sep = ""))
-    mosaic(formula, data = Titanic)
+    mosaicplot(formula, data = Titanic)
   })
 
   output$data <- renderTable({
