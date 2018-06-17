@@ -197,21 +197,21 @@ showPlots <- function(input, output, dataset) {
   })
   
   output$fitting <- renderPlot({
-    if (length(input$using) > 1) {
+    if (length(input$using) >= 1) {
       lm1 <- makeModel(input, dataset)
       plot(lm1, which = c(1))
     }
   })
   
   output$modelQuantileQuantilePlot <- renderPlot({
-    if (length(input$using) > 1) {
+    if (length(input$using) >= 1) {
       lm1 <- makeModel(input, dataset)
       plot(lm1, which = c(2))
     }
   })
   
   output$outliers <- renderPlot({
-    if (length(input$using) > 1) {
+    if (length(input$using) >= 1) {
       lm1 <- makeModel(input, dataset)
       plot(lm1)
     }
@@ -222,7 +222,7 @@ showPlots <- function(input, output, dataset) {
 
 summaries <- function(input, output, dataset) {
   output$summary <- renderPrint({
-    if (length(input$using) > 1) {
+    if (length(input$using) >= 1) {
       lm1 <- makeModel(input, dataset)
       summary(lm1)
     }

@@ -105,8 +105,8 @@ ui <- fluidPage(titlePanel("Datavisualiser"),
                         ),
                       mainPanel(
                        plotOutput("correlationPlot", height = "900px"),
-                       verbatimTextOutput("summary"),
                        plotOutput("selfChoosyCorrelationPlot"),
+                       verbatimTextOutput("summary"),
                        plotOutput("fitting"),
                        plotOutput("modelQuantileQuantilePlot"),
                        plotOutput("outliers")
