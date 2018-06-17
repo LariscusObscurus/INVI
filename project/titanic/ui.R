@@ -9,7 +9,7 @@ ui <- fluidPage(titlePanel("Titanic"),
                     fluidRow(
                       column(
                         12,
-                        plotOutput("mosaicPlot")
+                        plotOutput("mosaicPlot", height = "900px")
                       ),
                       column(
                         12,
