@@ -1,5 +1,4 @@
 library(shiny)
-library(mosaic)
 library(purrr)
 
 server <- function(input, output) {
@@ -13,7 +12,7 @@ server <- function(input, output) {
   output$mosaicPlot <- renderPlot({
     dims <- paste(input$dimensions, collapse = " + ")
     formula <- as.formula(paste("~ ", dims, sep = ""))
-    mosaicplot(formula, data = Titanic)
+    mosaicplot(formula, data = Titanic, color = TRUE)
   })
 
   output$data <- renderTable({
